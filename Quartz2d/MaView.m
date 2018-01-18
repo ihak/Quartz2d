@@ -20,7 +20,7 @@
 //    CGContextSetRGBFillColor(context, 0, 0, 1, 0.5);
 //    CGContextFillRect(context, CGRectMake(0, 0, 100, 200));
 
-    [self doStrokeAndFillRect:context];
+    [self doAlphaRects:context];
     [super drawRect:dirtyRect];
 }
 
@@ -93,6 +93,54 @@
     CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + rect.size.height);
     // ********** Segment 4 created by closing the path **********
     CGContextClosePath(context);
+}
+
+- (void)doPathRects:(CGContextRef)context {
+    CGRect ourRect = {{20.0, 220.0}, {130.0, 100.0}};
+    
+    // ***** Rectangle 1 *****
+    // Create the rect path.
+    [self createRectPath:context rect:ourRect];
+    // Set the fill color to the light opaque blue
+    CGContextSetRGBFillColor(context, 0.482, 0.62, 0.871, 1.0);
+    // Fill the path
+    CGContextDrawPath(context, kCGPathFill); // Clear the path
+    
+    // ***** Rectangle 2 *****
+    CGContextTranslateCTM(context, 200.0, 0.0);
+    CGContextSetRGBStrokeColor(context, 0.404, 0.808, 0.239, 1.0);
+    [self createRectPath:context rect:ourRect];
+    CGContextSetLineWidth(context, 10.0);
+    CGContextDrawPath(context, kCGPathStroke);
+    
+    // ***** Rectangle 3 *****
+    CGContextTranslateCTM(context, -200.0, -200.0);
+    [self createRectPath:context rect:ourRect];
+    CGContextDrawPath(context, kCGPathFillStroke);
+    
+    // ***** Rectangle 4 *****
+    CGContextTranslateCTM(context, 200.0, 0.0);
+    [self createRectPath:context rect:ourRect];
+    CGContextDrawPath(context, kCGPathStroke); // clears the path
+    [self createRectPath:context rect:ourRect]; // create the path again
+    CGContextDrawPath(context, kCGPathFill);
+}
+
+- (void)doAlphaRects:(CGContextRef)context {
+    CGRect ourRect = {{0.0, 0.0}, {130.0, 100}};
+    
+    CGContextTranslateCTM(context, 300.0, 300.0);
+    
+    int numRects = 6;
+    float tintAdjust = 1.0/numRects;
+    float tint = 1.0;
+    float rotateAngle = 2 * M_PI / numRects;
+    
+    for (int i = 0; i < numRects; i++, tint -= tintAdjust) {
+        CGContextSetRGBFillColor(context, tint, 0.0, 0.0, tint);
+        CGContextFillRect(context, ourRect);
+        CGContextRotateCTM(context, rotateAngle);
+    }
 }
 
 @end
