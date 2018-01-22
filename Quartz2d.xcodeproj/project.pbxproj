@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E4DDF87B2015F3CA00AA97E3 /* Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DDF87A2015F3CA00AA97E3 /* Transformations.m */; };
 		E4E050F020108480001CD33D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E050EF20108480001CD33D /* AppDelegate.m */; };
 		E4E050F320108480001CD33D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E050F220108480001CD33D /* ViewController.m */; };
 		E4E050F520108480001CD33D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4E050F420108480001CD33D /* Assets.xcassets */; };
@@ -27,6 +28,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E4DDF8792015F3C900AA97E3 /* Transformations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Transformations.h; sourceTree = "<group>"; };
+		E4DDF87A2015F3CA00AA97E3 /* Transformations.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Transformations.m; sourceTree = "<group>"; };
 		E4E050EB20108480001CD33D /* Quartz2d.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quartz2d.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E050EE20108480001CD33D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E4E050EF20108480001CD33D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -94,6 +97,8 @@
 				E4E050FC20108480001CD33D /* Quartz2d.entitlements */,
 				E4E0511020108B03001CD33D /* MaView.h */,
 				E4E0511120108B03001CD33D /* MaView.m */,
+				E4DDF8792015F3C900AA97E3 /* Transformations.h */,
+				E4DDF87A2015F3CA00AA97E3 /* Transformations.m */,
 			);
 			path = Quartz2d;
 			sourceTree = "<group>";
@@ -208,6 +213,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4DDF87B2015F3CA00AA97E3 /* Transformations.m in Sources */,
 				E4E0511220108B03001CD33D /* MaView.m in Sources */,
 				E4E050F320108480001CD33D /* ViewController.m in Sources */,
 				E4E050FB20108480001CD33D /* main.m in Sources */,

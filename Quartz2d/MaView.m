@@ -20,7 +20,7 @@
 //    CGContextSetRGBFillColor(context, 0, 0, 1, 0.5);
 //    CGContextFillRect(context, CGRectMake(0, 0, 100, 200));
 
-    [self doAlphaRects:context];
+    [self doDashedLines:context];
     [super drawRect:dirtyRect];
 }
 
@@ -141,6 +141,44 @@
         CGContextFillRect(context, ourRect);
         CGContextRotateCTM(context, rotateAngle);
     }
+}
+
+- (void)drawStrokedLine:(CGContextRef) context start:(CGPoint)start end:(CGPoint)end {
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, start.x, start.y);
+    CGContextAddLineToPoint(context, end.x, end.y);
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
+- (void)doDashedLines:(CGContextRef) context {
+    CGPoint start, end;
+    start.x = 20.0; start.y = 270.0;
+    CGFloat const lengths[] = { 12.0, 6.0, 5.0, 6.0, 5.0, 6.0 };
+    end.x = 300.0; end.y = 270.0;
+    
+    // ***** Line 1 solid line *****
+    CGContextSetLineWidth(context, 5.0);
+    [self drawStrokedLine:context start:start end:end];
+    // ***** Line 2 long dashes *****
+    CGContextTranslateCTM(context, 0.0, -50.0);
+    CGContextSetLineDash(context, 0.0, lengths, 2);
+    [self drawStrokedLine:context start:start end:end];
+    // ***** Line 3 long short pattern
+    CGContextTranslateCTM(context, 0.0, -50.0);
+    CGContextSetLineDash(context, 0.0, lengths, 4);
+    [self drawStrokedLine:context start:start end:end];
+    // ***** Line 4 long short short pattern *****
+    CGContextTranslateCTM(context, 0.0, -50.0);
+    CGContextSetLineDash(context, 0.0, lengths, 6);
+    [self drawStrokedLine:context start:start end:end];
+    // ***** Line 5 short short long pattern *****
+    CGContextTranslateCTM(context, 0.0, -50.0);
+    CGContextSetLineDash(context, 18.0, lengths, 6);
+    [self drawStrokedLine:context start:start end:end];
+    // ***** Line 6 solid line *****
+    CGContextTranslateCTM(context, 0.0, -50.0);
+    CGContextSetLineDash(context, 0, NULL, 0); // Reset dash to solid line.
+    [self drawStrokedLine:context start:start end:end];
 }
 
 @end
