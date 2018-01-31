@@ -16,7 +16,8 @@
     // Drawing code here.
     CGContextRef context = [NSGraphicsContext currentContext].graphicsPort;
     CGContextTranslateCTM(context, 50.0, 50.0);
-    [self doRotatedEllipses:context];
+    [self drawCoordinateAxes:context ofLength:4];
+    [self doWave:context];
 }
 
 - (void)drawCoordinateAxes:(CGContextRef)context ofLength:(int)length {
@@ -190,6 +191,166 @@
         // Move over by 1 unit in x for the next ellipse.
         CGContextTranslateCTM(context, 1.0, 0.0);
     }
+}
+
+- (void)drawSkewedCoordinateSystem:(CGContextRef)context {
+    float alpha = M_PI/8, beta = M_PI/12;
+    CGAffineTransform skew;
+    
+    // Create a rectangle that is 72 units on a side
+    // with its origin at (0,0).
+    CGRect r = CGRectMake(0, 0, 72, 72);
+    
+    CGContextTranslateCTM(context, 144, 144);
+    // Draw the coordinate axes untransformed.
+    [self drawCoordinateAxes:context ofLength:3];
+    // Fill the rectangle.
+    CGContextFillRect(context, r);
+    
+    // Create an affine transform that skews the coordinate system,
+    // skewing the x axis by alpha radians and the y axis by beta radians.
+    skew = CGAffineTransformMake(1, tan(alpha), tan(beta), 1, 0, 0);
+    // Apply that transform to the context coordinate system.
+    CGContextConcatCTM(context, skew);
+    // Set the fill and stroke color to a dark blue.
+    CGContextSetRGBStrokeColor(context, 0.11, 0.208, 0.451, 1.0);
+    CGContextSetRGBFillColor(context, 0.11, 0.208, 0.451, 1.0);
+    // Draw the coordinate axes again, now transformed.
+    [self drawCoordinateAxes:context ofLength:3];
+    // Set the fill color again but with a partially transparent alpha.
+    CGContextSetRGBFillColor(context, 0.11, 0.208, 0.451, 0.7);
+    // Fill the rectangle in the transformed coordinate system.
+    CGContextFillRect(context, r);
+}
+
+- (void)doEgg:(CGContextRef) context {
+    CGPoint p0 = {0., 0.}, p1 = {0., 200.};
+    CGPoint c1 = {140., 5.}, c2 = {80., 198.};
+//    CGContextTranslateCTM(context, 100., 5.);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, p0.x, p0.y);
+    // Create the Bézier path segment for the right side of the egg.
+    CGContextAddCurveToPoint(context, c1.x, c1.y, c2.x, c2.y, p1.x, p1.y);
+    // Create the Bézier path segment for the left side of the egg.
+    CGContextAddCurveToPoint(context, -c2.x, c2.y, -c1.x, c1.y,p0.x, p0.y);
+    CGContextClosePath(context);
+    CGContextSetLineWidth(context, 2);
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
+- (void)doMovingArches:(CGContextRef) context {
+    CGPoint p0 = {0.0, 0.0}, p1 = {200.0, 0.0};
+    CGPoint c1 = {0.0, 300.0}, c2 = {200.0, 300.0};
+    CGContextTranslateCTM(context, 100.0, 5.0);
+    
+    [self createBoundingRect:context p0:p0 p1:p1 c1:c1 c2:c2];
+    
+    CGContextSetLineWidth(context, 2);
+    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
+    do {
+        [self drawTangents:context p0:p0 p1:p1 c1:c1 c2:c2];
+
+        CGContextBeginPath(context);
+        CGContextMoveToPoint(context, p0.x, p0.y);
+        
+        // Create the Bezier path segment
+        CGContextAddCurveToPoint(context, c1.x, c1.y, c2.x, c2.y, p1.x, p1.y);
+        
+        CGContextDrawPath(context, kCGPathStroke);
+        c1.x += 10;
+        c2.x -= 10;
+    } while (c1.x != c2.x);
+}
+
+- (void)doNegativeMovingArches:(CGContextRef) context {
+    CGPoint p0 = {0.0, 0.0}, p1 = {200.0, 0.0};
+    CGPoint c1 = {200.0, 300.0}, c2 = {0.0, 300.0};
+    CGContextTranslateCTM(context, 100.0, 5.0);
+    
+    [self createBoundingRect:context p0:p0 p1:p1 c1:c1 c2:c2];
+    
+    CGContextSetLineWidth(context, 2);
+    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
+    int i = 0;
+    do {
+        [self drawTangents:context p0:p0 p1:p1 c1:c1 c2:c2];
+        CGContextBeginPath(context);
+        CGContextMoveToPoint(context, p0.x, p0.y);
+
+        // Create the Bezier path segment
+        CGContextAddCurveToPoint(context, c1.x, c1.y, c2.x, c2.y, p1.x, p1.y);
+        
+        CGContextDrawPath(context, kCGPathStroke);
+        c1.x += 10;
+        c2.x -= 10;
+        i++;
+    } while (i < 10);
+}
+
+- (void)doArch:(CGContextRef)context {
+    CGPoint p0 = {0.0, 0.0}, p1 = {200.0, 0.0};
+    CGPoint c1 = {0.0, 300.0}, c2 = {200.0, 300.0};
+    CGContextTranslateCTM(context, 100.0, 5.0);
+    
+    [self createBoundingRect:context p0:p0 p1:p1 c1:c1 c2:c2];
+    [self drawTangents:context p0:p0 p1:p1 c1:c1 c2:c2];
+    
+    CGContextSetLineWidth(context, 2);
+    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, p0.x, p0.y);
+    
+    // Create the Bezier path segment
+    CGContextAddCurveToPoint(context, c1.x, c1.y, c2.x, c2.y, p1.x, p1.y);
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
+- (void)doWave:(CGContextRef)context {
+    CGPoint p0 = {0.0, 0.0}, p1 = {200.0, 0.0};
+    CGPoint c1 = {50.0, 50.0}, c2 = {150.0, -50.0};
+    
+    [self createBoundingRect:context p0:p0 p1:p1 c1:c1 c2:c2];
+    [self drawTangents:context p0:p0 p1:p1 c1:c1 c2:c2];
+    
+    CGContextSetLineWidth(context, 2);
+    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, p0.x, p0.y);
+    
+    // Create the Bezier path segment
+    CGContextAddCurveToPoint(context, c1.x, c1.y, c2.x, c2.y, p1.x, p1.y);
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
+- (void)createBoundingRect:(CGContextRef)context p0:(CGPoint)p0 p1:(CGPoint)p1 c1:(CGPoint)c1 c2:(CGPoint)c2 {
+    CGContextSetLineWidth(context, 1);
+    CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);
+
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, p0.x, p0.y);
+    CGContextAddLineToPoint(context, c1.x, c1.y);
+    CGContextAddLineToPoint(context, c2.x, c2.y);
+    CGContextAddLineToPoint(context, p1.x, p1.y);
+    CGContextClosePath(context);
+    
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
+- (void)drawTangents:(CGContextRef)context p0:(CGPoint)p0 p1:(CGPoint)p1 c1:(CGPoint)c1 c2:(CGPoint)c2 {
+    CGContextSaveGState(context);
+    
+    CGContextBeginPath(context);
+    // Add tangents
+    CGContextSetLineWidth(context, 1.0);
+    CGContextSetRGBStrokeColor(context, 0.0, 1.0, 0.0, 1.0);
+    CGContextMoveToPoint(context, p0.x, p0.y);
+    CGContextAddLineToPoint(context, c1.x, c1.y);
+    
+    CGContextMoveToPoint(context, p1.x, p1.y);
+    CGContextAddLineToPoint(context, c2.x, c2.y);
+    CGContextStrokePath(context);
+    
+    CGContextRestoreGState(context);
 }
 
 @end
