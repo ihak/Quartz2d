@@ -16,8 +16,8 @@
     // Drawing code here.
     CGContextRef context = [NSGraphicsContext currentContext].graphicsPort;
     CGContextTranslateCTM(context, 50.0, 50.0);
-    [self drawCoordinateAxes:context ofLength:4];
-    [self doWave:context];
+//    [self drawCoordinateAxes:context ofLength:4];
+    [self doJoins:context];
 }
 
 - (void)drawCoordinateAxes:(CGContextRef)context ofLength:(int)length {
@@ -353,4 +353,96 @@
     CGContextRestoreGState(context);
 }
 
+- (void)addRoundedRectToPath:(CGContextRef) context rect:(CGRect)rect ovalWidth:(CGFloat)ovalWidth ovalHeight:(CGFloat)ovalHeight {
+    float fw, fh;
+    // If either ovalWidth or ovalHeight is zero, add a regular rectangle.
+    if (ovalWidth == 0 || ovalHeight == 0) {
+        CGContextAddRect(context, rect);
+    }
+    else {
+        CGContextSaveGState(context);
+        {
+            // Translate to lower-left corner of rectangle
+            CGContextTranslateCTM(context, CGRectGetMinX(rect), CGRectGetMinY(rect));
+            // Scale by the oval width and height so that
+            // each rounded corner is 0.5 units in radius.
+            CGContextScaleCTM(context, ovalWidth, ovalHeight);
+            // Unscale the rectangle width by the amount of x scaling.
+            fw = CGRectGetWidth(rect) / ovalWidth;
+            // Unscale the rectangle height by the amount of y scaling.
+            fh = CGRectGetHeight(rect) / ovalHeight;
+            // Start at the right edge of the rectangle, at the midpoint in y.
+            CGContextMoveToPoint(context, fw, fh/2);
+            // ***** Segment 1 *****
+            CGContextAddArcToPoint(context, fw, fh, fw/2, fh, 0.5);
+            // ***** Segment 2 *****
+            CGContextAddArcToPoint(context, 0, fh, 0, fh/2, 0.5);
+            // ***** Segment 3 *****
+            CGContextAddArcToPoint(context, 0, 0, fw/2, 0, 0.5);
+            // ***** Segment 4 *****
+            CGContextAddArcToPoint(context, fw, 0, fw, fh/2, 0.5);
+            // Close the path adds the last segment.
+            CGContextClosePath(context);
+        }
+        CGContextRestoreGState(context);
+    }
+}
+
+- (void)doRoundedRects:(CGContextRef)context {
+    CGRect rect = {{10.0, 10.0}, {210.0, 150.0}};
+    float ovalWidth = 10.0, ovalHeight = 100.0;
+    CGContextSetLineWidth(context, 2.0);
+    CGContextBeginPath(context);
+    [self addRoundedRectToPath:context rect:rect ovalWidth:ovalWidth ovalHeight:ovalHeight];
+    CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);
+    CGContextDrawPath(context, kCGPathStroke);
+    
+    CGContextSetRGBStrokeColor(context, 0.0, 1.0, 0.0, 1.0);
+//    CGContextTranslateCTM(context, CGRectGetWidth(rect)/10.0, CGRectGetHeight(rect)/10.0);
+    CGContextAddEllipseInRect(context, rect);
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
+-(void)doStrokedElipses:(CGContextRef)context {
+    CGContextTranslateCTM(context, 150.0, 180.0);
+    CGContextSetLineWidth(context, 10.0);
+    // Draw ellipse 1 with a uniform stroke
+    CGContextSaveGState(context); {
+        // Scale the CTM so that the circular arc will be elliptical
+        CGContextScaleCTM(context, 2, 1);
+        CGContextBeginPath(context);
+        // Create an arc that is a circle.
+        CGContextAddArc(context, 0.0, 0.0, 45.0, 0.0, 2*M_PI, 0);
+        // Restore the context parameter prior to stroking the path.
+        // CGContextRestoreGState does not affect the path in the context.
+    }
+    CGContextRestoreGState(context);
+    CGContextStrokePath(context);
+    
+    CGContextTranslateCTM(context, 220.0, 0.0);
+    // Draw ellipse 2 with non-uniform stroke.
+    CGContextSaveGState(context); {
+        // Scale the CTM so that the circular arc will be elliptical
+        CGContextScaleCTM(context, 2, 1);
+        CGContextBeginPath(context);
+        // Create an arc that is a circle.
+        CGContextAddArc(context, 0.0, 0.0, 45.0, 0, 2*M_PI, 0);
+        CGContextStrokePath(context);
+        CGContextRestoreGState(context);
+    }
+}
+
+- (void)doJoins:(CGContextRef)context {
+    CGContextTranslateCTM(context, 15.0, 20.0);
+    CGContextSetLineWidth(context, 10);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, 0.0, 0.0);
+    CGContextAddLineToPoint(context, 100.0, 0.0);
+    CGContextAddLineToPoint(context, 0.0, -21.0);
+    
+    CGContextMoveToPoint(context, 170.0, 0.0);
+    CGContextAddLineToPoint(context, 250.0, 0.0);
+    CGContextAddLineToPoint(context, 170.0, -15.0);
+    CGContextStrokePath(context);
+}
 @end
