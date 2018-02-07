@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2F0AFD932020E5B100DEC226 /* CubicBezierCurves.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0AFD922020E5B100DEC226 /* CubicBezierCurves.m */; };
+		E42DD4C8202ABF990069646C /* Polygons.m in Sources */ = {isa = PBXBuildFile; fileRef = E42DD4C7202ABF990069646C /* Polygons.m */; };
+		E46088F020298FD100784BAE /* FillingPaths.m in Sources */ = {isa = PBXBuildFile; fileRef = E46088EF20298FD100784BAE /* FillingPaths.m */; };
 		E4DDF87B2015F3CA00AA97E3 /* Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DDF87A2015F3CA00AA97E3 /* Transformations.m */; };
 		E4E050F020108480001CD33D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E050EF20108480001CD33D /* AppDelegate.m */; };
 		E4E050F320108480001CD33D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E050F220108480001CD33D /* ViewController.m */; };
@@ -31,6 +33,10 @@
 /* Begin PBXFileReference section */
 		2F0AFD912020E5B100DEC226 /* CubicBezierCurves.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CubicBezierCurves.h; sourceTree = "<group>"; };
 		2F0AFD922020E5B100DEC226 /* CubicBezierCurves.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CubicBezierCurves.m; sourceTree = "<group>"; };
+		E42DD4C6202ABF990069646C /* Polygons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Polygons.h; sourceTree = "<group>"; };
+		E42DD4C7202ABF990069646C /* Polygons.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Polygons.m; sourceTree = "<group>"; };
+		E46088EE20298FD100784BAE /* FillingPaths.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FillingPaths.h; sourceTree = "<group>"; };
+		E46088EF20298FD100784BAE /* FillingPaths.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FillingPaths.m; sourceTree = "<group>"; };
 		E4DDF8792015F3C900AA97E3 /* Transformations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Transformations.h; sourceTree = "<group>"; };
 		E4DDF87A2015F3CA00AA97E3 /* Transformations.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Transformations.m; sourceTree = "<group>"; };
 		E4E050EB20108480001CD33D /* Quartz2d.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quartz2d.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +110,10 @@
 				E4DDF87A2015F3CA00AA97E3 /* Transformations.m */,
 				2F0AFD912020E5B100DEC226 /* CubicBezierCurves.h */,
 				2F0AFD922020E5B100DEC226 /* CubicBezierCurves.m */,
+				E46088EE20298FD100784BAE /* FillingPaths.h */,
+				E46088EF20298FD100784BAE /* FillingPaths.m */,
+				E42DD4C6202ABF990069646C /* Polygons.h */,
+				E42DD4C7202ABF990069646C /* Polygons.m */,
 			);
 			path = Quartz2d;
 			sourceTree = "<group>";
@@ -218,11 +228,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E42DD4C8202ABF990069646C /* Polygons.m in Sources */,
 				E4DDF87B2015F3CA00AA97E3 /* Transformations.m in Sources */,
 				E4E0511220108B03001CD33D /* MaView.m in Sources */,
 				E4E050F320108480001CD33D /* ViewController.m in Sources */,
 				2F0AFD932020E5B100DEC226 /* CubicBezierCurves.m in Sources */,
 				E4E050FB20108480001CD33D /* main.m in Sources */,
+				E46088F020298FD100784BAE /* FillingPaths.m in Sources */,
 				E4E050F020108480001CD33D /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

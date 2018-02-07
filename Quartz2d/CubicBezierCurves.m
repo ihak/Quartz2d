@@ -15,14 +15,14 @@
     // Drawing code here.
     
     CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-    CGContextTranslateCTM(context, 50.0, 50.0);
+    CGContextTranslateCTM(context, 150.0, 50.0);
 
     //    CGContextSetRGBFillColor(context, 1, 0, 0, 1);
     //    CGContextFillRect(context, CGRectMake(0, 0, 200, 100));
     //    CGContextSetRGBFillColor(context, 0, 0, 1, 0.5);
     //    CGContextFillRect(context, CGRectMake(0, 0, 100, 200));
     
-    [self doMovingArches:context];
+    [self doRoundedRects:context];
     [super drawRect:dirtyRect];
 }
 
@@ -193,9 +193,12 @@
 }
 
 - (void)doRoundedRects:(CGContextRef)context {
-    CGRect rect = {{10.0, 10.0}, {210.0, 150.0}};
-    float ovalWidth = 10.0, ovalHeight = 100.0;
+    CGRect rect = {{10.0, 10.0}, {100.0, 100.0}};
+    float ovalWidth = 20.0, ovalHeight = 20.0;
     CGContextSetLineWidth(context, 2.0);
+//    CGContextScaleCTM(context, 1.0, 1.5);
+//    CGContextRotateCTM(context, M_PI_4);
+    CGContextFillRect(context, CGRectMake(10.0, 10.0, 50.0, 50.0));
     CGContextBeginPath(context);
     [self addRoundedRectToPath:context rect:rect ovalWidth:ovalWidth ovalHeight:ovalHeight];
     CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);

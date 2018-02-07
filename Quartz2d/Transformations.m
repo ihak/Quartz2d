@@ -17,6 +17,7 @@
     CGContextRef context = [NSGraphicsContext currentContext].graphicsPort;
     CGContextTranslateCTM(context, 50.0, 50.0);
 //    [self drawCoordinateAxes:context ofLength:4];
+    [self doRotatedEllipses:context];
 }
 
 - (void)drawCoordinateAxes:(CGContextRef)context ofLength:(int)length {
