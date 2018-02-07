@@ -17,7 +17,8 @@
     CGContextRef context = [NSGraphicsContext currentContext].graphicsPort;
     CGContextTranslateCTM(context, 100.0, 100.0);
 //    [self doPolygons:context];
-    [self doPolygonsByArcs:context];
+//    [self doPolygonsByArcs:context];
+    [self doStar:context];
 }
 
 - (void)doPolygons:(CGContextRef)context {
@@ -66,7 +67,7 @@
     // Initialize variable for polygon path.
     CGMutablePathRef polygonPath = CGPathCreateMutable();
     
-    CGFloat sides = 8.0;
+    int sides = 7;
     // Angle between two adjacent sides of a polygon.
     CGFloat angle = 2*M_PI/sides;
     
@@ -114,6 +115,42 @@
     // Release created paths.
     CFRelease(circlePath);
     CFRelease(polygonPath);
+}
+
+- (NSArray *)getVerticesofPolygonOfSize:(CGSize)size andSides:(int)sides {
+    NSMutableArray *vertices = [NSMutableArray array];
+    
+    CGFloat radius = floorf( 0.9 * MIN(size.width, size.height) / 2.0f );
+    
+    for (int n = 0; n < sides; n++) {
+        CGFloat rotationFactor = ((2 * M_PI) / sides) * (n+1);
+        CGFloat x = cos(rotationFactor) * radius;
+        CGFloat y = sin(rotationFactor) * radius;
+        
+        [vertices addObject:[NSValue valueWithPoint:CGPointMake(x, y)]];
+    }
+
+    return vertices;
+}
+
+- (void)doStar:(CGContextRef)context {
+    CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+    CGContextSetRGBStrokeColor(context, 0.0, 1.0, 0.0, 1.0);
+    CGContextSetLineWidth(context, 2.0);
+    
+    NSArray *points = [self getVerticesofPolygonOfSize:CGSizeMake(100.0, 100.0) andSides:5];
+    CGContextBeginPath(context);
+    
+    for (int i = 0; i < points.count; i++) {
+        CGPoint pointValue = ((NSValue *)points[i]).pointValue;
+        CGContextMoveToPoint(context, pointValue.x, pointValue.y);
+        
+        int nextIndex = (i + 2) % points.count;
+        CGPoint pointValue2 = ((NSValue *)points[nextIndex]).pointValue;
+        CGContextAddLineToPoint(context, pointValue2.x, pointValue2.y);
+    }
+    
+    CGContextStrokePath(context);
 }
 
 @end
