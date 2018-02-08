@@ -18,7 +18,9 @@
     CGContextTranslateCTM(context, 100.0, 100.0);
 //    [self doPolygons:context];
 //    [self doPolygonsByArcs:context];
-    [self doStar:context];
+//    [self doStar:context];
+//    [self doGoldenRect:context];
+    [self doCaptainAmericaLogo:context];
 }
 
 - (void)doPolygons:(CGContextRef)context {
@@ -120,7 +122,7 @@
 - (NSArray *)getVerticesofPolygonOfSize:(CGSize)size andSides:(int)sides {
     NSMutableArray *vertices = [NSMutableArray array];
     
-    CGFloat radius = floorf( 0.9 * MIN(size.width, size.height) / 2.0f );
+    CGFloat radius = floorf( 1.0 * MIN(size.width, size.height) / 2.0f );
     
     for (int n = 0; n < sides; n++) {
         CGFloat rotationFactor = ((2 * M_PI) / sides) * (n+1);
@@ -138,19 +140,103 @@
     CGContextSetRGBStrokeColor(context, 0.0, 1.0, 0.0, 1.0);
     CGContextSetLineWidth(context, 2.0);
     
-    NSArray *points = [self getVerticesofPolygonOfSize:CGSizeMake(100.0, 100.0) andSides:5];
+    NSArray *points = [self getVerticesofPolygonOfSize:CGSizeMake(200.0, 200.0) andSides:19];
     CGContextBeginPath(context);
     
     for (int i = 0; i < points.count; i++) {
         CGPoint pointValue = ((NSValue *)points[i]).pointValue;
         CGContextMoveToPoint(context, pointValue.x, pointValue.y);
         
-        int nextIndex = (i + 2) % points.count;
+        int nextIndex = (i + 11) % points.count;
         CGPoint pointValue2 = ((NSValue *)points[nextIndex]).pointValue;
         CGContextAddLineToPoint(context, pointValue2.x, pointValue2.y);
     }
     
-    CGContextStrokePath(context);
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
+- (void)doGoldenRect:(CGContextRef)context {
+    CGRect rect = {{10.0, 10.0}, {100.0, 100.0}};
+    
+    CGFloat a = MIN(rect.size.width, rect.size.height);
+    CGFloat a_plus_b = a*1.617;
+    
+    CGRect goldenRect = CGRectMake(rect.origin.x, rect.origin.y, a_plus_b, a);
+    CGContextFillRect(context, goldenRect);
+}
+
+- (void)doCaptainAmericaLogo:(CGContextRef)context {
+    CGRect rect = CGRectMake(0.0, 0.0, 520.0, 520.0);
+    CGPoint center = CGPointMake(CGRectGetWidth(rect)/2.0, CGRectGetHeight(rect)/2.0);
+    CGFloat radius1 = CGRectGetWidth(rect)/2.0;
+    CGFloat radius2 = radius1 - (radius1 * 0.20);
+    CGFloat radius3 = radius2 - (radius1 * 0.20);
+    CGFloat radius4 = radius3 - (radius1 * 0.20);
+    CGSize starSize = CGSizeMake(radius4 * 2, radius4 * 2);
+    
+    NSColor *red = [NSColor colorWithRed:170.0/256.0 green:20.0/256.0 blue:40.0/256.0 alpha:1.0];
+    NSColor *blue = [NSColor colorWithRed:1.0/256.0 green:3.0/256.0 blue:66.0/256.0 alpha:1.0];
+    
+    // ***** Circle 1 *****
+    CGMutablePathRef circle1 = CGPathCreateMutable();
+    CGPathAddArc(circle1, NULL, center.x, center.y, radius1, 0, 2*M_PI, 0);
+    
+    CGContextSetFillColorWithColor(context, red.CGColor);
+    CGContextAddPath(context, circle1);
+    CGContextDrawPath(context, kCGPathFill);
+    
+    // ***** Circle 2 *****
+    CGMutablePathRef circle2 = CGPathCreateMutable();
+    CGPathAddArc(circle2, NULL, center.x, center.y, radius2, 0, 2*M_PI, 0);
+    
+    CGContextSetFillColorWithColor(context, [NSColor whiteColor].CGColor);
+    CGContextAddPath(context, circle2);
+    CGContextDrawPath(context, kCGPathFill);
+    
+    // ***** Circle 3 *****
+    CGMutablePathRef circle3 = CGPathCreateMutable();
+    CGPathAddArc(circle3, NULL, center.x, center.y, radius3, 0, 2*M_PI, 0);
+    
+    CGContextSetFillColorWithColor(context, red.CGColor);
+    CGContextAddPath(context, circle3);
+    CGContextDrawPath(context, kCGPathFill);
+    
+    // ***** Circle 4 *****
+    CGMutablePathRef circle4 = CGPathCreateMutable();
+    CGPathAddArc(circle4, NULL, center.x, center.y, radius4, 0, 2*M_PI, 0);
+    
+    CGContextSetFillColorWithColor(context, blue.CGColor);
+    CGContextAddPath(context, circle4);
+    CGContextDrawPath(context, kCGPathFill);
+    
+    // ***** Star *****
+    NSArray *points = [self getVerticesofPolygonOfSize:starSize andSides:5];
+    
+    CGMutablePathRef starPath = CGPathCreateMutable();
+    NSValue *value = points[0];
+    CGPoint pointValue = value.pointValue;
+    CGAffineTransform transform = CGAffineTransformMakeTranslation(center.x, center.y);
+    CGPathMoveToPoint(starPath, &transform, pointValue.x, pointValue.y);
+    
+    for (int i = 0; i < points.count; i++) {
+        int nextIndex = (int) [points indexOfObject:value];
+        nextIndex = (nextIndex + 2) % points.count;
+        value = points[nextIndex];
+        
+        pointValue = value.pointValue;
+        CGPathAddLineToPoint(starPath, &transform, pointValue.x, pointValue.y);
+    }
+
+    CGContextSetFillColorWithColor(context, [NSColor whiteColor].CGColor);
+    CGContextAddPath(context, starPath);
+
+    CGContextDrawPath(context, kCGPathFill);
+    
+    CFRelease(circle1);
+    CFRelease(circle2);
+    CFRelease(circle3);
+    CFRelease(circle4);
+    CFRelease(starPath);
 }
 
 @end
