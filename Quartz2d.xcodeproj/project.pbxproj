@@ -18,6 +18,7 @@
 		E4E050FB20108480001CD33D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E050FA20108480001CD33D /* main.m */; };
 		E4E0510620108481001CD33D /* Quartz2dTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E0510520108481001CD33D /* Quartz2dTests.m */; };
 		E4E0511220108B03001CD33D /* MaView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E0511120108B03001CD33D /* MaView.m */; };
+		E4E44921202DB29700A97639 /* Flowers.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E44920202DB29700A97639 /* Flowers.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		E4E0510720108481001CD33D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4E0511020108B03001CD33D /* MaView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaView.h; sourceTree = "<group>"; };
 		E4E0511120108B03001CD33D /* MaView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MaView.m; sourceTree = "<group>"; };
+		E4E4491F202DB29700A97639 /* Flowers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Flowers.h; sourceTree = "<group>"; };
+		E4E44920202DB29700A97639 /* Flowers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Flowers.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +117,8 @@
 				E46088EF20298FD100784BAE /* FillingPaths.m */,
 				E42DD4C6202ABF990069646C /* Polygons.h */,
 				E42DD4C7202ABF990069646C /* Polygons.m */,
+				E4E4491F202DB29700A97639 /* Flowers.h */,
+				E4E44920202DB29700A97639 /* Flowers.m */,
 			);
 			path = Quartz2d;
 			sourceTree = "<group>";
@@ -229,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E42DD4C8202ABF990069646C /* Polygons.m in Sources */,
+				E4E44921202DB29700A97639 /* Flowers.m in Sources */,
 				E4DDF87B2015F3CA00AA97E3 /* Transformations.m in Sources */,
 				E4E0511220108B03001CD33D /* MaView.m in Sources */,
 				E4E050F320108480001CD33D /* ViewController.m in Sources */,

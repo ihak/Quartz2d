@@ -22,7 +22,7 @@
     //    CGContextSetRGBFillColor(context, 0, 0, 1, 0.5);
     //    CGContextFillRect(context, CGRectMake(0, 0, 100, 200));
     
-    [self doRoundedRects:context];
+    [self doPetals:context];
     [super drawRect:dirtyRect];
 }
 
@@ -65,6 +65,22 @@
         c2.x -= 10;
     } while (c1.x != c2.x);
 }
+
+- (void)doPetals:(CGContextRef) context {
+    CGPoint p0 = {0.0, 0.0}, p1 = {-10.0, 0.0};
+    CGPoint c1 = {-100.0, 100.0}, c2 = {100.0, 100.0};
+    CGContextTranslateCTM(context, 100.0, 5.0);
+    
+//    [self createBoundingRect:context p0:p0 p1:p1 c1:c1 c2:c2];
+    
+    CGContextSetLineWidth(context, 2);
+    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, p0.x, p0.y);
+    CGContextAddCurveToPoint(context, c1.x, c1.y, c2.x, c2.y, p1.x, p1.y);
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
 
 - (void)doNegativeMovingArches:(CGContextRef) context {
     CGPoint p0 = {0.0, 0.0}, p1 = {200.0, 0.0};
