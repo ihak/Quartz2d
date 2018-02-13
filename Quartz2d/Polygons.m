@@ -140,14 +140,14 @@
     CGContextSetRGBStrokeColor(context, 0.0, 1.0, 0.0, 1.0);
     CGContextSetLineWidth(context, 2.0);
     
-    NSArray *points = [self getVerticesofPolygonOfSize:CGSizeMake(200.0, 200.0) andSides:19];
+    NSArray *points = [self getVerticesofPolygonOfSize:CGSizeMake(200.0, 200.0) andSides:10];
     CGContextBeginPath(context);
     
     for (int i = 0; i < points.count; i++) {
         CGPoint pointValue = ((NSValue *)points[i]).pointValue;
         CGContextMoveToPoint(context, pointValue.x, pointValue.y);
         
-        int nextIndex = (i + 11) % points.count;
+        int nextIndex = (i + 6) % points.count;
         CGPoint pointValue2 = ((NSValue *)points[nextIndex]).pointValue;
         CGContextAddLineToPoint(context, pointValue2.x, pointValue2.y);
     }
@@ -166,7 +166,7 @@
 }
 
 - (void)doCaptainAmericaLogo:(CGContextRef)context {
-    CGRect rect = CGRectMake(0.0, 0.0, 520.0, 520.0);
+    CGRect rect = CGRectMake(0.0, 0.0, 1024.0, 1024.0);
     CGPoint center = CGPointMake(CGRectGetWidth(rect)/2.0, CGRectGetHeight(rect)/2.0);
     CGFloat radius1 = CGRectGetWidth(rect)/2.0;
     CGFloat radius2 = radius1 - (radius1 * 0.20);

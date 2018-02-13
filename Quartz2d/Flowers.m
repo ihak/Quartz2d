@@ -15,7 +15,10 @@
     
     // Drawing code here.
     CGContextRef context = [NSGraphicsContext currentContext].graphicsPort;
-    [self doRandomDots:context];
+    CGContextTranslateCTM(context, 100.0, 100.0);
+//    [self doRandomDots:context];
+    [self doPetal:context];
+    
 }
 
 - (void)doPetals:(CGContextRef) context {
@@ -34,15 +37,15 @@
 }
 
 - (void)doRandomDots:(CGContextRef)context {
-    CGRect rect = {{0.0, 0.0}, {150.0, 150.0}};
-    [self doRandomDots:context inRect:rect count:4500];
+    CGRect rect = {{0.0, 0.0}, {50.0, 50.0}};
+    [self doRandomDots:context inRect:rect count:500];
 }
 
 - (void)doRandomDots:(CGContextRef)context inRect:(CGRect)rect count:(int)count {
     CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
     CGContextFillRect(context, rect);
     
-    CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 0.5);
+    CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
     CGContextBeginPath(context);
     for (int i = 0; i < count; i++) {
         int x = arc4random_uniform(CGRectGetWidth(rect));
@@ -65,6 +68,39 @@
     CGContextClosePath(context);
     
     CGContextDrawPath(context, kCGPathStroke);
+}
+
+- (void)doPetal:(CGContextRef)context {
+    CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 1.0, 1.0);
+
+    int petals = 18;
+    
+    CGPoint p0 = {0.0, 0.0};
+    CGPoint c1 = {25.0, 50.0};
+    CGPoint c2 = {75.0, 50.0};
+    CGPoint p1 = {100.0, 0.0};
+
+    CGPathRef path = [self createPetalPath:context p0:p0 p1:p1 c1:c1 c2:c2];
+    
+    CGFloat rotationAngle = (2*M_PI)/petals;
+    for (int i = 0; i < petals; i++) {
+        CGContextAddPath(context, path);
+        CGContextRotateCTM(context, rotationAngle);
+    }
+    
+    CGContextStrokePath(context);
+}
+
+- (CGPathRef)createPetalPath:(CGContextRef)context p0:(CGPoint)p0 p1:(CGPoint)p1 c1:(CGPoint)c1 c2:(CGPoint)c2 {
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, p0.x, p0.y);
+    CGPathAddCurveToPoint(path, NULL, c1.x, c1.y, c2.x, c2.y, p1.x, p1.y);
+    CGPathAddCurveToPoint(path, NULL, c2.x, -c2.y, c1.x, -c1.y, p0.x, p0.y);
+    CGPathCloseSubpath(path);
+    
+    return path;
 }
 
 @end
